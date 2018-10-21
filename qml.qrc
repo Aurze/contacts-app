@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>qml/PersonListView.qml</file>
+        <file>qml/PersonDetailView.qml</file>
+    </qresource>
+</RCC>
