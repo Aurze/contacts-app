@@ -1,29 +1,41 @@
 #ifndef PERSONMODEL_H
 #define PERSONMODEL_H
 
-#include <QAbstractItemModel>
+#include <QAbstractListModel>
 
-class PersonModel : public QAbstractItemModel
+class PersonList;
+
+class PersonListModel : public QAbstractListModel
 {
-    Q_OBJECT
+		Q_OBJECT
+		Q_PROPERTY(PersonList *list READ list WRITE setList)
 
 public:
-    explicit PersonModel(QObject *parent = nullptr);
+		explicit PersonListModel(QObject *parent = nullptr);
 
-    // Header:
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+		enum {
+				FirstNameRole = Qt::UserRole,
+				LastNameRole
+		};
 
-    // Basic functionality:
-    QModelIndex index(int row, int column,
-                      const QModelIndex &parent = QModelIndex()) const override;
-    QModelIndex parent(const QModelIndex &index) const override;
+		// Basic functionality:
+		int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+		QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+		// Editable:
+		bool setData(const QModelIndex &index, const QVariant &value,
+								 int role = Qt::EditRole) override;
+
+		Qt::ItemFlags flags(const QModelIndex& index) const override;
+
+		virtual QHash<int, QByteArray> roleNames() const override;
+
+		PersonList *list() const;
+		void setList(PersonList *list);
 
 private:
+		PersonList *mList;
 };
 
 #endif // PERSONMODEL_H

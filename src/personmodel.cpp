@@ -1,46 +1,107 @@
 #include "personmodel.h"
 
-PersonModel::PersonModel(QObject *parent)
-    : QAbstractItemModel(parent)
+#include "personlist.h"
+
+PersonListModel::PersonListModel(QObject *parent)
+	: QAbstractListModel(parent)
+	, mList(nullptr)
 {
 }
 
-QVariant PersonModel::headerData(int section, Qt::Orientation orientation, int role) const
+int PersonListModel::rowCount(const QModelIndex &parent) const
 {
-    // FIXME: Implement me!
+	// For list models only the root node (an invalid parent) should return the list's size. For all
+	// other (valid) parents, rowCount() should return 0 so that it does not become a tree model.
+	if (parent.isValid() || !mList)
+		return 0;
+
+	return mList->items().size();
 }
 
-QModelIndex PersonModel::index(int row, int column, const QModelIndex &parent) const
+QVariant PersonListModel::data(const QModelIndex &index, int role) const
 {
-    // FIXME: Implement me!
+	if (!index.isValid() || !mList)
+		return QVariant();
+
+	const Person item = mList->items().at(index.row());
+	switch (role) {
+		case FirstNameRole:
+			return QVariant(item.first_name);
+		case LastNameRole:
+			return QVariant(item.last_name);
+	}
+
+	return QVariant();
 }
 
-QModelIndex PersonModel::parent(const QModelIndex &index) const
+bool PersonListModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    // FIXME: Implement me!
+	if (!mList)
+		return false;
+
+	Person item = mList->items().at(index.row());
+	switch (role) {
+		case FirstNameRole:
+			item.first_name = value.toString();
+			break;
+		case LastNameRole:
+			item.last_name = value.toString();
+			break;
+	}
+
+	if (mList->setItemAt(index.row(), item)) {
+		emit dataChanged(index, index, QVector<int>() << role);
+		return true;
+	}
+	return false;
 }
 
-int PersonModel::rowCount(const QModelIndex &parent) const
+Qt::ItemFlags PersonListModel::flags(const QModelIndex &index) const
 {
-    if (!parent.isValid())
-        return 0;
+	if (!index.isValid())
+		return Qt::NoItemFlags;
 
-    // FIXME: Implement me!
+	return Qt::ItemIsEditable;
 }
 
-int PersonModel::columnCount(const QModelIndex &parent) const
+QHash<int, QByteArray> PersonListModel::roleNames() const
 {
-    if (!parent.isValid())
-        return 0;
-
-    // FIXME: Implement me!
+	QHash<int, QByteArray> names;
+	names[FirstNameRole] = "first_name";
+	names[LastNameRole] = "last_name";
+	return names;
 }
 
-QVariant PersonModel::data(const QModelIndex &index, int role) const
+PersonList *PersonListModel::list() const
 {
-    if (!index.isValid())
-        return QVariant();
+	return mList;
+}
 
-    // FIXME: Implement me!
-    return QVariant();
+void PersonListModel::setList(PersonList *list)
+{
+	beginResetModel();
+
+	if (mList)
+		mList->disconnect(this);
+
+	mList = list;
+
+	if (mList) {
+		connect(mList, &PersonList::preItemAppended, this, [=]() {
+			const int index = mList->items().size();
+			beginInsertRows(QModelIndex(), index, index);
+		});
+		connect(mList, &PersonList::postItemAppended, this, [=]() {
+			endInsertRows();
+		});
+
+		connect(mList, &PersonList::preItemRemoved, this, [=](int index) {
+			beginRemoveRows(QModelIndex(), index, index);
+		});
+		connect(mList, &PersonList::postItemRemoved, this, [=]() {
+			endRemoveRows();
+		});
+	}
+
+	endResetModel();
 }
