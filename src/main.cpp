@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 	qmlRegisterType<PersonListModel>("Person", 1, 0, "PersonListModel");
 	qmlRegisterUncreatableType<PersonList>("Person", 1, 0, "PersonList",
 																				 QStringLiteral("PersonList should not be created in QML"));
-	//qmlRegisterType<PersonList>("Person", 1, 0, "PersonDetail");
+	qmlRegisterType<PersonList>("Person", 1, 0, "PersonDetail");
 
 	PersonList personList;
 

@@ -1,6 +1,7 @@
 #include "personmodel.h"
 
 #include "personlist.h"
+#include "persondetail.h"
 
 PersonListModel::PersonListModel(QObject *parent)
 	: QAbstractListModel(parent)
@@ -105,3 +106,5 @@ void PersonListModel::setList(PersonList *list)
 
 	endResetModel();
 }
+
+

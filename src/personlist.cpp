@@ -1,5 +1,7 @@
 #include "personlist.h"
 
+extern QVector<Person> mPersons;
+
 PersonList::PersonList(QObject *parent) : QObject(parent)
 {
 		mPersons.append({ QStringLiteral("John"), QStringLiteral("Wick") });

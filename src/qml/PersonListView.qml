@@ -21,8 +21,7 @@ Page {
             delegate: ItemDelegate {
                 text: { model.last_name + ", " + model.first_name }
                 width: parent.width
-                onClicked: stackView.push("PersonDetailView.qml")
-
+                onClicked: stackView.push("PersonDetailView.qml", { first_name: model.first_name, last_name: model.last_name})
             }
         }
     }

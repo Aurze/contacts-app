@@ -7,13 +7,15 @@ Page {
     width: 600
     height: 400
 
+    property string first_name: "first_name"
+    property string last_name: "last_name"
     title: qsTr("Page 1")
 
     TextField {
         id: txtFirst
         x: 166
         y: 134
-        text: qsTr("Text Field")
+        text: first_name
     }
 
     Text {
@@ -28,7 +30,7 @@ Page {
         id: txtLast
         x: 166
         y: 208
-        text: qsTr("Text Field")
+        text: last_name
     }
 
     Text {

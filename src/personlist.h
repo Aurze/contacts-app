@@ -10,6 +10,7 @@ struct Person {
 	QString last_name;
 };
 
+
 class PersonList : public QObject
 {
 	Q_OBJECT
@@ -32,6 +33,7 @@ public slots:
 
 private:
 	QVector<Person> mPersons;
+
 };
 
 #endif // PERSONLIST_H

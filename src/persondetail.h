@@ -4,11 +4,18 @@
 #include <QObject>
 #include <QString>
 
+#include "personlist.h"
+
 class PersonDetail : public QObject
 {
 	Q_OBJECT
 public:
 	explicit PersonDetail(QObject *parent = nullptr);
+	PersonDetail(const Person& p) :
+		m_firstName(p.first_name),
+		m_lastName(p.last_name){
+
+	}
 
 	QString firstName() const { return m_firstName; }
 	QString lastName() const { return m_lastName; }
