@@ -3,12 +3,16 @@
 
 #include <QObject>
 #include <QString>
+#include <QVariant>
 
 #include "personlist.h"
 
 class PersonDetail : public QObject
 {
 	Q_OBJECT
+	Q_PROPERTY(QString firstName READ firstName WRITE setFirstName NOTIFY firstNameChanged)
+	Q_PROPERTY(QString lastName READ lastName WRITE setLastName NOTIFY lastNameChanged)
+
 public:
 	explicit PersonDetail(QObject *parent = nullptr);
 	PersonDetail(const Person& p) :
@@ -16,9 +20,13 @@ public:
 		m_lastName(p.last_name){
 
 	}
-
+	enum {
+		FirstNameRole = Qt::UserRole,
+		LastNameRole
+	};
 	QString firstName() const { return m_firstName; }
 	QString lastName() const { return m_lastName; }
+
 
 public slots:
 	void setFirstName(QString firstName);

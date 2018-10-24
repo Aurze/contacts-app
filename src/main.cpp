@@ -4,6 +4,7 @@
 
 #include "personlist.h"
 #include "personmodel.h"
+#include "personquery.h"
 
 int main(int argc, char *argv[])
 {
@@ -14,8 +15,9 @@ int main(int argc, char *argv[])
 	qmlRegisterType<PersonListModel>("Person", 1, 0, "PersonListModel");
 	qmlRegisterUncreatableType<PersonList>("Person", 1, 0, "PersonList",
 																				 QStringLiteral("PersonList should not be created in QML"));
-	qmlRegisterType<PersonList>("Person", 1, 0, "PersonDetail");
+	qmlRegisterType<PersonDetail>("Person", 1, 0, "PersonDetail");
 
+	PersonQuery pq;
 	PersonList personList;
 
 	QQmlApplicationEngine engine;

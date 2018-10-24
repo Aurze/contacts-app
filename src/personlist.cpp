@@ -1,11 +1,11 @@
 #include "personlist.h"
+#include "personquery.h"
 
 extern QVector<Person> mPersons;
 
 PersonList::PersonList(QObject *parent) : QObject(parent)
 {
-		mPersons.append({ QStringLiteral("John"), QStringLiteral("Wick") });
-		mPersons.append({ QStringLiteral("Johnny"), QStringLiteral("Cash") });
+	mPersons = PersonQuery().mPersons;
 }
 
 QVector<Person> PersonList::items() const
