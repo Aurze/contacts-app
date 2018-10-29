@@ -1,6 +1,7 @@
 project(contacts-app)
 
 find_package(Qt5 COMPONENTS Core Quick REQUIRED)
+find_package(libcontacts REQUIRED)
 
 add_executable(${PROJECT_NAME} "main.cpp"
   "personmodel.h"
@@ -12,4 +13,7 @@ add_executable(${PROJECT_NAME} "main.cpp"
   "personquery.h"
   "qml.qrc")
 
-target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Quick)
+target_link_libraries(${PROJECT_NAME}
+    Qt5::Core
+    Qt5::Quick
+    libcontacts::libcontacts)
